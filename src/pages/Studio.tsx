@@ -187,10 +187,10 @@ export default function Studio() {
                 className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 group shadow-2xl shadow-accent/20"
               >
                 <img 
-                  src="/pfp.jpg.jpeg" 
+                  src="https://github.com/user-attachments/assets/0c9790c4-8b58-4ba2-af80-6a4baa9cca91" 
                   alt="Luqman Alagha"
                   referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover object-[72%_center] grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
+                  className="w-full h-full object-cover object-center grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent opacity-60" />
               </motion.div>
