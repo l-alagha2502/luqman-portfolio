@@ -95,14 +95,6 @@
   z-index: 4;
 }
 
-.project-arrows {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  position: relative;
-  z-index: 4;
-}
-
 .project-arrow-wrap {
   color: inherit;
   cursor: pointer;
@@ -115,15 +107,6 @@
 
 .project-arrow-wrap:hover .project-arrow {
   transform: translate(4px, -4px);
-}
-
-.hover-arrow-label {
-  position: absolute;
-  right: 30px;
-  white-space: nowrap;
-  color: var(--orange);
-  font: 9px 'DM Mono', monospace;
-  pointer-events: none;
 }
 
 .sketch-modal-backdrop {
