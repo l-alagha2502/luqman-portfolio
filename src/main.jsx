@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ArrowDownRight, ArrowUpRight, Brain, Clock3, Command, Dumbbell, Github, Linkedin, Mail, Volume2, VolumeX, X, Zap } from 'lucide-react'
+import { ArrowDownRight, ArrowLeft, ArrowRight, ArrowUpRight, Brain, Clock3, Command, Dumbbell, Github, Linkedin, Mail, Volume2, VolumeX, X, Zap } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from '@studio-freight/lenis'
@@ -12,10 +12,13 @@ gsap.registerPlugin(ScrollTrigger)
 const stack = ['REACT', 'VITE', 'JAVASCRIPT', 'CSS', 'GSAP', 'DISCORD.JS']
 const pixelStorageKey = 'luqa-pixel-drawing'
 const projects = [
-  { id: '01', name: 'VASTY', type: 'EXPERIMENTAL', detail: 'Web Dev / Web Design / 1 Day', color: '#3b82f6', href: 'https://vastx.app' },
+  { id: '01', name: 'VAST', type: 'EXPERIMENTAL', detail: 'Web Dev / Web Design / 1 Day', color: '#3b82f6' },
   { id: '02', name: 'KXK.LIB', type: 'OPENLIBRARY', detail: 'Community / OpenLibrary / 2 Days', color: '#f97316', href: 'https://kxk.vastx.app/' },
   { id: '03', name: 'SKULL KNIGHT SKETCH', type: 'SKETCHING', detail: 'Art / Sketch / 5 Hours', color: '#a3e635' },
-  { id: '04', name: 'Mawaqit', type: 'TOOLS', detail: 'Tools / Soul / 1 Day', color: '#3b82f6', href: 'https://mawaqit.vastx.app/' },
+]
+const vastProjects = [
+  { name: 'Draft', image: '/draft-poster-design.png', description: 'A focus tool for studying, work, etc.', href: 'https://draft.vastx.app' },
+  { name: 'Mawaqit', image: '/mawaqit-poster-design.png', description: 'A local prayer time tracker and notifier tool.', href: 'https://mawaqit.vastx.app' },
 ]
 const skills = [
   ['React / Vite', 'DEV'], ['Python', 'DEV'], ['GSAP Motion', 'DEV'], ['WebGL', 'DEV'],
@@ -31,6 +34,8 @@ function App() {
   const [filter, setFilter] = useState('ALL')
   const [sound, setSound] = useState(false)
   const [activeProject, setActiveProject] = useState(null)
+  const [vastOpen, setVastOpen] = useState(false)
+  const [vastProjectIndex, setVastProjectIndex] = useState(0)
   const [command, setCommand] = useState('')
   const [terminalLines, setTerminalLines] = useState(terminalIntro)
   const [pixelColor, setPixelColor] = useState('blue')
@@ -66,6 +71,17 @@ function App() {
   useEffect(() => {
     localStorage.setItem(pixelStorageKey, JSON.stringify(pixelDrawing))
   }, [pixelDrawing])
+
+  useEffect(() => {
+    if (!vastOpen) return undefined
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setVastOpen(false)
+      if (event.key === 'ArrowLeft') setVastProjectIndex((index) => (index - 1 + vastProjects.length) % vastProjects.length)
+      if (event.key === 'ArrowRight') setVastProjectIndex((index) => (index + 1) % vastProjects.length)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [vastOpen])
 
   useEffect(() => {
     pursuitAudio.current = new Audio('/Pursuit%20-%20Gesaffelstein.mp3')
@@ -143,6 +159,11 @@ function App() {
   }
   const startDrawing = (index) => { setIsDrawing(true); paintPixel(index) }
   const resetDrawing = () => { setPixelDrawing(Array(128).fill('')); setIsDrawing(false) }
+  const openVast = () => { setVastProjectIndex(0); setVastOpen(true) }
+  const moveVastProject = (direction) => {
+    setVastProjectIndex((index) => (index + direction + vastProjects.length) % vastProjects.length)
+    playSound()
+  }
   const aboutContent = {
     MIND: { text: 'Self taught in coding, design and art, I like building stuff, from discord servers to websites', Icon: Brain },
     BODY: { text: "When I'm not on my desk, I'm out training, from boxing to basketball, it keeps me active, and a break from all the work", Icon: Dumbbell },
@@ -175,7 +196,9 @@ function App() {
           </div>
         </section>
 
-        <section id="work" className="projects wrap reveal"><div className="section-heading"><span className="eyebrow">[ 03 / SELECTED WORK ]</span><span className="section-note">THINGS THAT HAVE LEFT THE TERMINAL</span></div><div className="project-list">{projects.map((project) => <div className="project-row magnetic" key={project.id} onMouseEnter={() => setActiveProject(project)} onMouseLeave={() => setActiveProject(null)} onClick={() => project.href ? window.open(project.href, '_blank', 'noopener,noreferrer') : project.id === '03' && setSketchOpen(true)}><span className="project-id">{project.id}</span>{project.href ? <a className="project-name" href={project.href} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}>{project.name}</a> : <span className="project-name">{project.name}</span>}<span className="project-type">{project.type}</span>{project.href ? <a className="project-arrow-wrap" href={project.href} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}><ArrowUpRight className="project-arrow" size={22} /></a> : <ArrowUpRight className="project-arrow" size={22} />}{activeProject?.id === project.id && <span className="project-preview" style={{ '--preview-color': project.color }}><strong>{project.id}</strong><small>{project.detail}</small><span className="preview-art" /></span>}</div>)}</div></section>
+        <section id="work" className="projects wrap reveal"><div className="section-heading"><span className="eyebrow">[ 03 / SELECTED WORK ]</span><span className="section-note">THINGS THAT HAVE LEFT THE TERMINAL</span></div><div className="project-list">{projects.map((project) => <div className="project-row magnetic" key={project.id} onMouseEnter={() => setActiveProject(project)} onMouseLeave={() => setActiveProject(null)} onClick={() => project.id === '01' ? openVast() : project.href ? window.open(project.href, '_blank', 'noopener,noreferrer') : project.id === '03' && setSketchOpen(true)}><span className="project-id">{project.id}</span>{project.href ? <a className="project-name" href={project.href} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}>{project.name}</a> : <span className="project-name">{project.name}</span>}<span className="project-type">{project.type}</span>{project.href ? <a className="project-arrow-wrap" href={project.href} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}><ArrowUpRight className="project-arrow" size={22} /></a> : <ArrowUpRight className="project-arrow" size={22} />}{activeProject?.id === project.id && <span className="project-preview" style={{ '--preview-color': project.color }}><strong>{project.id}</strong><small>{project.detail}</small><span className="preview-art" /></span>}</div>)}</div></section>
+
+        {vastOpen && <div className="sketch-modal-backdrop" role="presentation" onClick={() => setVastOpen(false)}><div className="sketch-modal vast-modal" role="dialog" aria-modal="true" aria-label="VAST projects" onClick={(event) => event.stopPropagation()}><div className="panel-top"><span>01 / VAST PROJECTS</span><button className="modal-close" onClick={() => setVastOpen(false)} aria-label="Close VAST projects"><X size={18} /></button></div><div className="vast-carousel"><button className="vast-nav" onClick={() => moveVastProject(-1)} aria-label="Previous VAST project"><ArrowLeft size={20} /></button><article className="vast-project-card"><img src={vastProjects[vastProjectIndex].image} alt={`${vastProjects[vastProjectIndex].name} poster`} /><div className="vast-project-copy"><h3>{vastProjects[vastProjectIndex].name}</h3><p>{vastProjects[vastProjectIndex].description}</p><a className="vast-visit" href={vastProjects[vastProjectIndex].href} target="_blank" rel="noreferrer">Visit <ArrowUpRight size={15} /></a></div></article><button className="vast-nav" onClick={() => moveVastProject(1)} aria-label="Next VAST project"><ArrowRight size={20} /></button></div><div className="vast-carousel-status"><span>{String(vastProjectIndex + 1).padStart(2, '0')} / {String(vastProjects.length).padStart(2, '0')}</span><span>USE ARROWS OR ← → KEYS</span></div></div></div>}
 
         {sketchOpen && <div className="sketch-modal-backdrop" role="presentation" onClick={() => setSketchOpen(false)}><div className="sketch-modal" role="dialog" aria-modal="true" aria-label="Skull Knight Sketch" onClick={(event) => event.stopPropagation()}><div className="panel-top"><span>03 / SKULL KNIGHT SKETCH</span><button className="modal-close" onClick={() => setSketchOpen(false)} aria-label="Close sketch"><X size={18} /></button></div><div className="sketch-image-wrap"><img src="/sk-drawing.jpeg" alt="Skull Knight sketch" /></div><div className="sketch-modal-footer"><span>ART / SKETCH / 5 HOURS</span><span>SKETCHING / ORIGINAL STUDY</span></div></div></div>}
 
