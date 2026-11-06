@@ -14,7 +14,7 @@ const pixelStorageKey = 'luqa-pixel-drawing'
 const projects = [
   { id: '01', name: 'VAST', type: 'EXPERIMENTAL', detail: 'Web Dev / Web Design / 1 Day', color: '#3b82f6' },
   { id: '02', name: 'KXK.LIB', type: 'OPENLIBRARY', detail: 'Community / OpenLibrary / 2 Days', color: '#f97316', href: 'https://kxk.vastx.app/' },
-  { id: '03', name: 'SKULL KNIGHT SKETCH', type: 'SKETCHING', detail: 'Art / Sketch / 5 Hours', color: '#a3e635' },
+  { id: '03', name: 'SKETCHES', type: 'SKETCHING', detail: 'Art / Sketch / 5 Hours', color: '#a3e635' },
 ]
 const vastProjects = [
   { name: 'Draft', image: '/draft-poster-design.png', description: 'A focus tool for studying, work, etc.', href: 'https://draft.vastx.app' },
