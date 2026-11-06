@@ -419,6 +419,54 @@
   font: 10px 'DM Mono', monospace;
 }
 
+.kxk-modal {
+  width: min(680px, 100%);
+}
+
+.kxk-project-card {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  align-items: stretch;
+  background: #16171b;
+}
+
+.kxk-project-card img {
+  display: block;
+  width: 100%;
+  height: clamp(220px, 42vh, 360px);
+  object-fit: cover;
+}
+
+.kxk-project-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(20px, 4vw, 34px);
+}
+
+.kxk-project-copy h3 {
+  margin: 0 0 12px;
+  color: var(--orange);
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  letter-spacing: -.06em;
+}
+
+.kxk-project-copy p {
+  max-width: 260px;
+  margin: 0;
+  color: #d5d7dc;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.kxk-project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
 @media (max-width: 720px) {
   .about-tabs { margin-bottom: 32px; }
   .about-copy { min-height: 210px; }
@@ -432,6 +480,12 @@
   .vast-project-copy p { margin-bottom: 12px; font-size: 12px; }
   .vast-visit { padding: 8px 10px; }
   .vast-carousel-status { gap: 12px; flex-wrap: wrap; font-size: 8px; }
+  .kxk-project-card { grid-template-columns: 1fr; }
+  .kxk-project-card img { height: clamp(150px, 30vh, 230px); }
+  .kxk-project-copy { padding: 18px; }
+  .kxk-project-copy h3 { margin-bottom: 7px; font-size: 1.55rem; }
+  .kxk-project-copy p { font-size: 12px; }
+  .kxk-project-actions { margin-top: 16px; }
 }
 
 @keyframes spin {
