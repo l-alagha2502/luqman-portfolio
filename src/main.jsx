@@ -20,6 +20,13 @@ const vastProjects = [
   { name: 'Draft', image: '/draft-poster-design.png', description: 'A focus tool for studying, work, etc.', href: 'https://draft.vastx.app' },
   { name: 'Mawaqit', image: '/mawaqit-poster-design.png', description: 'A local prayer time tracker and notifier tool.', href: 'https://mawaqit.vastx.app' },
 ]
+const sketches = [
+  { name: 'Skull Knight', image: '/sk-drawing.jpeg', detail: 'ART / SKETCH / 5 HOURS' },
+  { name: 'Tears of Griffith', image: '/griffith-sketch.png', detail: 'ART / SKETCH / ORIGINAL STUDY' },
+  { name: 'The Darkest Knight', image: '/darkest-knight-sketch.png', detail: 'ART / SKETCH / ORIGINAL STUDY' },
+  { name: 'Spawn', image: '/spawn-sketch.png', detail: 'ART / SKETCH / ORIGINAL STUDY' },
+  { name: 'The Sentry (Void Form)', image: '/void-sketch.png', detail: 'ART / SKETCH / ORIGINAL STUDY' },
+]
 const skills = [
   ['React / Vite', 'DEV'], ['Python', 'DEV'], ['GSAP Motion', 'DEV'], ['WebGL', 'DEV'],
   ['Visual Systems', 'DESIGN'], ['Pixel Art', 'DESIGN'], ['Figma', 'DESIGN'], ['Muay Thai', 'ATHLETICS'],
@@ -49,6 +56,7 @@ function App() {
   })
   const [isDrawing, setIsDrawing] = useState(false)
   const [sketchOpen, setSketchOpen] = useState(false)
+  const [sketchIndex, setSketchIndex] = useState(0)
   const [aboutTab, setAboutTab] = useState('MIND')
 
   useEffect(() => {
@@ -82,6 +90,17 @@ function App() {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [vastOpen])
+
+  useEffect(() => {
+    if (!sketchOpen) return undefined
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setSketchOpen(false)
+      if (event.key === 'ArrowLeft') setSketchIndex((index) => (index - 1 + sketches.length) % sketches.length)
+      if (event.key === 'ArrowRight') setSketchIndex((index) => (index + 1) % sketches.length)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [sketchOpen])
 
   useEffect(() => {
     pursuitAudio.current = new Audio('/Pursuit%20-%20Gesaffelstein.mp3')
@@ -164,6 +183,11 @@ function App() {
     setVastProjectIndex((index) => (index + direction + vastProjects.length) % vastProjects.length)
     playSound()
   }
+  const openSketches = () => { setSketchIndex(0); setSketchOpen(true) }
+  const moveSketch = (direction) => {
+    setSketchIndex((index) => (index + direction + sketches.length) % sketches.length)
+    playSound()
+  }
   const aboutContent = {
     MIND: { text: 'Self taught in coding, design and art, I like building stuff, from discord servers to websites', Icon: Brain },
     BODY: { text: "When I'm not on my desk, I'm out training, from boxing to basketball, it keeps me active, and a break from all the work", Icon: Dumbbell },
@@ -196,11 +220,11 @@ function App() {
           </div>
         </section>
 
-        <section id="work" className="projects wrap reveal"><div className="section-heading"><span className="eyebrow">[ 03 / SELECTED WORK ]</span><span className="section-note">THINGS THAT HAVE LEFT THE TERMINAL</span></div><div className="project-list">{projects.map((project) => <div className="project-row magnetic" key={project.id} onMouseEnter={() => setActiveProject(project)} onMouseLeave={() => setActiveProject(null)} onClick={() => project.id === '01' ? openVast() : project.href ? window.open(project.href, '_blank', 'noopener,noreferrer') : project.id === '03' && setSketchOpen(true)}><span className="project-id">{project.id}</span>{project.href ? <a className="project-name" href={project.href} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}>{project.name}</a> : <span className="project-name">{project.name}</span>}<span className="project-type">{project.type}</span>{project.href ? <a className="project-arrow-wrap" href={project.href} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}><ArrowUpRight className="project-arrow" size={22} /></a> : <ArrowUpRight className="project-arrow" size={22} />}{activeProject?.id === project.id && <span className="project-preview" style={{ '--preview-color': project.color }}><strong>{project.id}</strong><small>{project.detail}</small><span className="preview-art" /></span>}</div>)}</div></section>
+        <section id="work" className="projects wrap reveal"><div className="section-heading"><span className="eyebrow">[ 03 / SELECTED WORK ]</span><span className="section-note">THINGS THAT HAVE LEFT THE TERMINAL</span></div><div className="project-list">{projects.map((project) => <div className="project-row magnetic" key={project.id} onMouseEnter={() => setActiveProject(project)} onMouseLeave={() => setActiveProject(null)} onClick={() => project.id === '01' ? openVast() : project.href ? window.open(project.href, '_blank', 'noopener,noreferrer') : project.id === '03' && openSketches()}><span className="project-id">{project.id}</span>{project.href ? <a className="project-name" href={project.href} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}>{project.name}</a> : <span className="project-name">{project.name}</span>}<span className="project-type">{project.type}</span>{project.href ? <a className="project-arrow-wrap" href={project.href} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()}><ArrowUpRight className="project-arrow" size={22} /></a> : <ArrowUpRight className="project-arrow" size={22} />}{activeProject?.id === project.id && <span className="project-preview" style={{ '--preview-color': project.color }}><strong>{project.id}</strong><small>{project.detail}</small><span className="preview-art" /></span>}</div>)}</div></section>
 
         {vastOpen && <div className="sketch-modal-backdrop" role="presentation" onClick={() => setVastOpen(false)}><div className="sketch-modal vast-modal" role="dialog" aria-modal="true" aria-label="VAST projects" onClick={(event) => event.stopPropagation()}><div className="panel-top"><span>01 / VAST PROJECTS</span><button className="modal-close" onClick={() => setVastOpen(false)} aria-label="Close VAST projects"><X size={18} /></button></div><div className="vast-carousel"><button className="vast-nav" onClick={() => moveVastProject(-1)} aria-label="Previous VAST project"><ArrowLeft size={20} /></button><article className="vast-project-card"><img src={vastProjects[vastProjectIndex].image} alt={`${vastProjects[vastProjectIndex].name} poster`} /><div className="vast-project-copy"><h3>{vastProjects[vastProjectIndex].name}</h3><p>{vastProjects[vastProjectIndex].description}</p><a className="vast-visit" href={vastProjects[vastProjectIndex].href} target="_blank" rel="noreferrer">Visit <ArrowUpRight size={15} /></a></div></article><button className="vast-nav" onClick={() => moveVastProject(1)} aria-label="Next VAST project"><ArrowRight size={20} /></button></div><div className="vast-carousel-status"><span>{String(vastProjectIndex + 1).padStart(2, '0')} / {String(vastProjects.length).padStart(2, '0')}</span><span>USE ARROWS OR ← → KEYS</span></div></div></div>}
 
-        {sketchOpen && <div className="sketch-modal-backdrop" role="presentation" onClick={() => setSketchOpen(false)}><div className="sketch-modal" role="dialog" aria-modal="true" aria-label="Skull Knight Sketch" onClick={(event) => event.stopPropagation()}><div className="panel-top"><span>03 / SKULL KNIGHT SKETCH</span><button className="modal-close" onClick={() => setSketchOpen(false)} aria-label="Close sketch"><X size={18} /></button></div><div className="sketch-image-wrap"><img src="/sk-drawing.jpeg" alt="Skull Knight sketch" /></div><div className="sketch-modal-footer"><span>ART / SKETCH / 5 HOURS</span><span>SKETCHING / ORIGINAL STUDY</span></div></div></div>}
+        {sketchOpen && <div className="sketch-modal-backdrop" role="presentation" onClick={() => setSketchOpen(false)}><div className="sketch-modal sketch-gallery-modal" role="dialog" aria-modal="true" aria-label={`${sketches[sketchIndex].name} sketch`} onClick={(event) => event.stopPropagation()}><div className="panel-top"><span>03 / {sketches[sketchIndex].name.toUpperCase()}</span><button className="modal-close" onClick={() => setSketchOpen(false)} aria-label="Close sketch"><X size={18} /></button></div><div className="sketch-gallery"><button className="sketch-nav" onClick={() => moveSketch(-1)} aria-label="Previous sketch"><ArrowLeft size={20} /></button><div className="sketch-image-wrap"><img src={sketches[sketchIndex].image} alt={`${sketches[sketchIndex].name} sketch`} /></div><button className="sketch-nav" onClick={() => moveSketch(1)} aria-label="Next sketch"><ArrowRight size={20} /></button></div><div className="sketch-modal-footer"><span>{sketches[sketchIndex].detail}</span><span>{String(sketchIndex + 1).padStart(2, '0')} / {String(sketches.length).padStart(2, '0')} · USE ARROWS OR ← → KEYS</span></div></div></div>}
 
         <section id="system" className="system wrap reveal"><div className="section-heading"><span className="eyebrow">[ 04 / MORE ABOUT ME ]</span><span className="section-note">SOME MORE INFO</span></div><div className="system-layout about-layout"><div className="linux-badge about-identity"><div className="about-shape"><activeAbout.Icon size={108} strokeWidth={1} /></div><span className="eyebrow">LUQMAN ALAGHA</span><h2>LU<br /><em>QA</em></h2><p>01001100 01110101 01110001 01100001</p><span className="badge-code">LQ / 2026 / 001</span></div><div className="skills-wrap about-info"><div className="about-tabs">{Object.keys(aboutContent).map((tab) => <button className={aboutTab === tab ? 'active' : ''} key={tab} onClick={() => { setAboutTab(tab); playSound() }}>{tab}</button>)}</div><div className="about-copy"><span className="eyebrow">{aboutTab} / PERSONAL LOG</span><p>{activeAbout.text}</p></div><div className="about-footer"><span>LUQA / FIELD NOTES</span><span>STATUS: EVOLVING</span></div></div></div></section>
 

@@ -122,10 +122,15 @@
 .sketch-modal {
   width: min(720px, 100%);
   max-height: 90vh;
-  overflow: auto;
+  overflow: hidden;
   border: 1px solid var(--orange);
   background: #101114;
   box-shadow: 12px 12px 0 var(--orange);
+}
+
+.sketch-gallery-modal {
+  display: flex;
+  flex-direction: column;
 }
 
 .sketch-modal .panel-top {
@@ -142,7 +147,9 @@
 }
 
 .sketch-image-wrap {
-  padding: 22px;
+  min-width: 0;
+  min-height: 0;
+  padding: 18px;
   display: grid;
   place-items: center;
   background: #16171b;
@@ -151,8 +158,37 @@
 .sketch-image-wrap img {
   display: block;
   max-width: 100%;
-  max-height: 65vh;
+  max-height: min(65vh, 600px);
   object-fit: contain;
+}
+
+.sketch-gallery {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+}
+
+.sketch-nav {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--orange);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.sketch-nav:hover,
+.sketch-nav:focus-visible {
+  border-color: var(--orange);
+  background: var(--orange);
+  color: var(--bg);
+  outline: none;
 }
 
 .sketch-modal-footer {
@@ -163,6 +199,37 @@
   gap: 20px;
   color: var(--muted);
   font: 10px 'DM Mono', monospace;
+}
+
+@media (max-width: 720px) {
+  .sketch-modal-backdrop {
+    padding: 16px;
+  }
+
+  .sketch-gallery {
+    grid-template-columns: 34px minmax(0, 1fr) 34px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .sketch-nav {
+    width: 34px;
+    height: 34px;
+  }
+
+  .sketch-image-wrap {
+    padding: 8px;
+  }
+
+  .sketch-image-wrap img {
+    max-height: 58vh;
+  }
+
+  .sketch-modal-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 .vast-modal {
